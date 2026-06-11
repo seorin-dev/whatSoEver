@@ -36,11 +36,12 @@ export function Roulette({ items, winnerIndex, spinMessages, onDone }: Props) {
     return () => cancelAnimationFrame(rafRef.current);
   }, [stopping]);
 
-  // 멘트 로테이션
+  // 멘트 로테이션 (정지 후에는 멈춤)
   useEffect(() => {
+    if (stopping) return;
     const t = setInterval(() => setMsgIdx((i) => (i + 1) % spinMessages.length), 1500);
     return () => clearInterval(t);
-  }, [spinMessages.length]);
+  }, [spinMessages.length, stopping]);
 
   // winner 도착 → 감속 정지 (최소 1.5초는 돌고 나서)
   useEffect(() => {
@@ -52,7 +53,8 @@ export function Roulette({ items, winnerIndex, spinMessages, onDone }: Props) {
       const current = degRef.current % 360;
       const delta = ((targetMod - current) % 360 + 360) % 360 + 720;
       setStopping(true);
-      setDeg(degRef.current + delta);
+      degRef.current += delta; // 정지 후 재스핀 등에서 stale 값을 읽지 않도록 동기화
+      setDeg(degRef.current);
     }, 1500);
     return () => clearTimeout(minSpin);
   }, [winnerIndex, seg]);
