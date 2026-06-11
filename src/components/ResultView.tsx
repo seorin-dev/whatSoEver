@@ -15,6 +15,7 @@ interface Props {
 
 export function ResultView({ analysis, reco, onRedraw, onSave, saved, today }: Props) {
   const [first, ...rest] = reco.top3;
+  if (!first) return null; // 폴백/LLM 모두 3개를 보장하지만 빈 배열 크래시 방어
   return (
     <div className="flex flex-col gap-4">
       <header className="text-center">
