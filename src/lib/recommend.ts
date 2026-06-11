@@ -34,10 +34,16 @@ function parseLlm(raw: string, candidates: ScoredFood[]): Omit<RecommendResult, 
     if (!Array.isArray(j.top3) || j.top3.length < 3) return null;
     const top3 = j.top3.slice(0, 3).map((t: { id: string; comment: string }) => {
       const food = candidates.find((c) => c.id === t.id);
-      if (!food || typeof t.comment !== 'string') throw new Error('invalid id');
+      if (!food || typeof t.comment !== 'string' || t.comment.length > 300) {
+        throw new Error('invalid item');
+      }
       return { id: food.id, name: food.name, emoji: food.emoji, comment: t.comment };
     });
-    if (typeof j.summary !== 'string' || !j.pairComment?.best || !j.pairComment?.worst) return null;
+    if (
+      typeof j.summary !== 'string' ||
+      typeof j.pairComment?.best !== 'string' ||
+      typeof j.pairComment?.worst !== 'string'
+    ) return null;
     return { top3, summary: j.summary, pairComment: j.pairComment };
   } catch {
     return null;

@@ -19,7 +19,7 @@ async function generate(prompt: string): Promise<string> {
     messages: [{ role: 'user', content: prompt }],
   });
   const block = msg.content[0];
-  if (block.type !== 'text') throw new Error('unexpected response');
+  if (!block || block.type !== 'text') throw new Error('unexpected response');
   return block.text;
 }
 
@@ -28,7 +28,8 @@ interface Body { analysis: TeamAnalysis; candidates: ScoredFood[]; seed: string;
 function isValidBody(b: unknown): b is Body {
   const x = b as Body;
   return !!x && !!x.analysis?.teamPct && Array.isArray(x.candidates)
-    && x.candidates.length >= 3 && typeof x.seed === 'string';
+    && x.candidates.length >= 3 && x.candidates.length <= 50
+    && typeof x.seed === 'string';
 }
 
 export async function POST(req: Request) {
