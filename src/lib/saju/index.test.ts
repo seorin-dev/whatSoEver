@@ -21,6 +21,9 @@ describe('analyzeTeam', () => {
     const a = analyzeTeam('t', members, new Date(2026, 5, 11));
     const b = analyzeTeam('t', members, new Date(2026, 5, 12));
     expect(a.iljin.ganZhi).not.toBe(b.iljin.ganZhi);
+    // 일진 가중이 실제 결과에 반영되는지 — 가중이 no-op이면 이 단언이 잡아낸다
+    // (2026-06-11=丙辰 fire+earth, 06-12=丁巳 fire+fire로 오행 구성이 다른 날짜 고정)
+    expect(a.teamPct).not.toEqual(b.teamPct);
   });
   it('멤버 1명이면 throw', () => {
     expect(() => analyzeTeam('t', members.slice(0, 1), new Date())).toThrow();
