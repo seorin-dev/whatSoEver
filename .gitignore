@@ -42,3 +42,6 @@ next-env.d.ts
 
 # superpowers
 .superpowers/
+
+# claude local settings
+.claude/settings.local.json
