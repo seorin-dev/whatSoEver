@@ -19,6 +19,7 @@ describe('buildFallback', () => {
     for (const t of r.top3) expect(t.comment.length).toBeGreaterThan(0);
     expect(r.summary.length).toBeGreaterThan(0);
     expect(r.pairComment.best).toContain(analysis.bestPair.a);
+    expect(r.pairComment.worst).toContain(analysis.worstPair.a);
     expect(r.source).toBe('fallback');
   });
   it('같은 시드면 같은 결과 (결정적)', () => {

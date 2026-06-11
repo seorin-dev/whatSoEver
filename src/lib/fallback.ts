@@ -71,10 +71,11 @@ export function buildFallback(
     top3,
     summary: pick(summaryPool, seed + 'summary') + lackNote,
     pairComment: {
+      // replacer 함수 사용 — 이름에 '$'가 있어도 특수 치환 패턴($&, $' 등)으로 깨지지 않게
       best: pick(BEST_PAIR_COMMENT, seed + 'best')
-        .replace('{a}', analysis.bestPair.a).replace('{b}', analysis.bestPair.b),
+        .replace('{a}', () => analysis.bestPair.a).replace('{b}', () => analysis.bestPair.b),
       worst: pick(WORST_PAIR_COMMENT, seed + 'worst')
-        .replace('{a}', analysis.worstPair.a).replace('{b}', analysis.worstPair.b),
+        .replace('{a}', () => analysis.worstPair.a).replace('{b}', () => analysis.worstPair.b),
     },
     source: 'fallback',
   };
