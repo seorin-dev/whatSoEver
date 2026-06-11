@@ -27,4 +27,7 @@ describe('computeMemberSaju', () => {
     expect(s.dayGan).toBe(s.pillarGlyphs[4]); // 연간,연지,월간,월지,일간 순
     expect(['wood', 'fire', 'earth', 'metal', 'water']).toContain(s.dayGanElement);
   });
+  it('잘못된 birthDate는 throw 한다', () => {
+    expect(() => computeMemberSaju({ name: 'a', birthDate: 'bad', birthHour: null })).toThrow();
+  });
 });

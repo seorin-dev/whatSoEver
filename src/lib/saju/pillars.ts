@@ -7,7 +7,9 @@ import { ganToElement, zhiToElement } from './elements';
 // 짝수 인덱스 = 천간, 홀수 인덱스 = 지지
 export function computeMemberSaju(input: MemberInput): MemberSaju {
   const [y, m, d] = input.birthDate.split('-').map(Number);
-  const hour = input.birthHour ?? 12; // 시주 미사용이어도 라이브러리 입력값은 필요
+  // birthHour=null이면 12시를 자리값으로 사용 — 일주는 00:00~22:59 출생엔 정확하지만
+  // 23:00~23:59(자시) 출생자는 하루 밀릴 수 있음 (시주 미사용이어도 라이브러리 입력값은 필요)
+  const hour = input.birthHour ?? 12;
   const solar = Solar.fromYmdHms(y, m, d, hour, 0, 0);
   const ec = solar.getLunar().getEightChar();
 
