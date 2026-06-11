@@ -57,6 +57,15 @@ export default function Home() {
     setSaved(true);
   }
 
+  function handleReset() {
+    setPhase('input');
+    setAnalysis(null);
+    setReco(null);
+    setWinnerIndex(null);
+    setExcludeIds([]);
+    setSaved(false);
+  }
+
   return (
     <>
       {phase === 'input' && (
@@ -73,7 +82,7 @@ export default function Home() {
       {phase === 'result' && analysis && reco && (
         <ResultView
           analysis={analysis} reco={reco} today={todayLabel}
-          onRedraw={handleRedraw} onSave={handleSave} saved={saved}
+          onRedraw={handleRedraw} onSave={handleSave} onReset={handleReset} saved={saved}
         />
       )}
     </>

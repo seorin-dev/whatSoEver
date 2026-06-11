@@ -9,11 +9,12 @@ interface Props {
   reco: RecommendResult;
   onRedraw: () => void;
   onSave: () => void;
+  onReset: () => void;
   saved: boolean;
   today: string; // 'YYYY년 M월 D일'
 }
 
-export function ResultView({ analysis, reco, onRedraw, onSave, saved, today }: Props) {
+export function ResultView({ analysis, reco, onRedraw, onSave, onReset, saved, today }: Props) {
   const [first, ...rest] = reco.top3;
   if (!first) return null; // 폴백/LLM 모두 3개를 보장하지만 빈 배열 크래시 방어
   return (
@@ -50,6 +51,9 @@ export function ResultView({ analysis, reco, onRedraw, onSave, saved, today }: P
           {saved ? '저장됨 ✅' : '팀 저장 💾'}
         </button>
       </div>
+      <button className="py-1 text-center text-sm text-ink-dim" onClick={onReset}>
+        ← 새 팀으로 다시 시작
+      </button>
     </div>
   );
 }
