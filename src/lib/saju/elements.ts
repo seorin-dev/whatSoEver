@@ -1,4 +1,4 @@
-import type { ElementKey } from './types';
+import type { ElementKey, Relation } from './types';
 
 const GAN_ELEMENT: Record<string, ElementKey> = {
   甲: 'wood',
@@ -57,8 +57,6 @@ const CONTROLS: Record<ElementKey, ElementKey> = {
   fire: 'metal',
   metal: 'wood',
 };
-
-export type Relation = 'generates' | 'generated' | 'controls' | 'controlled' | 'same';
 
 export function relation(a: ElementKey, b: ElementKey): Relation {
   if (a === b) return 'same';

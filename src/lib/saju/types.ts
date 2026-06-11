@@ -1,6 +1,8 @@
 export type ElementKey = 'wood' | 'fire' | 'earth' | 'metal' | 'water';
 
-export const ELEMENT_KEYS: ElementKey[] = ['wood', 'fire', 'earth', 'metal', 'water'];
+export const ELEMENT_KEYS: readonly ElementKey[] = ['wood', 'fire', 'earth', 'metal', 'water'];
+
+export type Relation = 'generates' | 'generated' | 'controls' | 'controlled' | 'same';
 
 export const ELEMENT_LABEL: Record<ElementKey, string> = {
   wood: '목(木)',
