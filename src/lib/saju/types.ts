@@ -42,6 +42,11 @@ export interface PairResult {
   score: number;
 }
 
+export interface Iljin {
+  ganZhi: string;
+  elements: ElementKey[];
+}
+
 export interface TeamAnalysis {
   teamName: string;
   members: MemberSaju[];
@@ -49,7 +54,7 @@ export interface TeamAnalysis {
   teamPct: Record<ElementKey, number>; // 일진 가중 반영 후 백분율
   excess: ElementKey[]; // pct >= 35
   lacking: ElementKey[]; // pct <= 10
-  iljin: { ganZhi: string; elements: ElementKey[] };
+  iljin: Iljin;
   bestPair: PairResult;
   worstPair: PairResult;
 }
