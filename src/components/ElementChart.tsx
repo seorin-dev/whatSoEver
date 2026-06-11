@@ -13,7 +13,12 @@ export function ElementChart({ analysis }: { analysis: TeamAnalysis }) {
   const data = ELEMENT_KEYS
     .map((k) => ({ key: k, name: ELEMENT_LABEL[k], value: analysis.teamPct[k] }))
     .filter((d) => d.value > 0);
-  const main = analysis.excess[0] ?? null;
+  // 과다 기운이 없어도(균형 팀) 최다 기운 캐릭터를 주인공으로 보여준다
+  const dominant = ELEMENT_KEYS.reduce((a, b) =>
+    analysis.teamPct[b] > analysis.teamPct[a] ? b : a,
+  );
+  const main = analysis.excess[0] ?? dominant;
+  const isExcess = analysis.excess.length > 0;
 
   return (
     <div className="glow-card p-4">
@@ -30,16 +35,17 @@ export function ElementChart({ analysis }: { analysis: TeamAnalysis }) {
           </ResponsiveContainer>
         </div>
         <div className="flex-1 text-sm">
-          {main && (
-            <div className="mb-1 flex items-center gap-2">
-              <ElementCharacter element={main} size={36} />
-              <span>
-                <b style={{ color: CHART_COLORS[main] }}>
-                  {ELEMENT_LABEL[main]} {analysis.teamPct[main]}%
-                </b> — {ELEMENT_CHARACTER[main]} 과다!
-              </span>
-            </div>
-          )}
+          <div className="mb-1 flex items-center gap-2">
+            <ElementCharacter element={main} size={36} />
+            <span>
+              <b style={{ color: CHART_COLORS[main] }}>
+                {ELEMENT_LABEL[main]} {analysis.teamPct[main]}%
+              </b>{' '}
+              — {isExcess
+                ? `${ELEMENT_CHARACTER[main]} 과다!`
+                : `오늘의 주인공은 ${ELEMENT_CHARACTER[main]}`}
+            </span>
+          </div>
           {analysis.lacking.length > 0 && (
             <p className="text-ink-dim">
               부족: {analysis.lacking.map((k) => ELEMENT_LABEL[k]).join(', ')}
