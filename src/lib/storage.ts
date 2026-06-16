@@ -28,3 +28,10 @@ export function saveTeam(team: SavedTeam, storage: Storage | null = defaultStora
   teams.unshift(team);
   storage.setItem(KEY, JSON.stringify(teams.slice(0, 10))); // 최대 10팀
 }
+
+export function deleteTeam(teamName: string, storage: Storage | null = defaultStorage()): SavedTeam[] {
+  if (!storage) return [];
+  const teams = loadTeams(storage).filter((t) => t.teamName !== teamName);
+  storage.setItem(KEY, JSON.stringify(teams));
+  return teams;
+}

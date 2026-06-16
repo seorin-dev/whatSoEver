@@ -45,7 +45,7 @@ export function ResultView({ analysis, reco, onRedraw, onSave, onReset, saved, t
 
       <div className="flex gap-2">
         <button className="flex-1 rounded-xl bg-accent py-3 font-bold text-night" onClick={onRedraw}>
-          다시 뽑기 🎲
+          다른 메뉴 추천 🎲
         </button>
         <button className="glow-card flex-1 py-3 font-bold" onClick={onSave} disabled={saved}>
           {saved ? '저장됨 ✅' : '팀 저장 💾'}

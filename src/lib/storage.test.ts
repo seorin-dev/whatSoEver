@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { saveTeam, loadTeams } from './storage';
+import { saveTeam, loadTeams, deleteTeam } from './storage';
 
 function memStorage(): Storage {
   const m = new Map<string, string>();
@@ -37,5 +37,14 @@ describe('팀 저장', () => {
     const s = memStorage();
     s.setItem('lunchton.teams', '{{{');
     expect(loadTeams(s)).toEqual([]);
+  });
+  it('팀을 삭제하면 목록에서 빠지고 나머지를 반환한다', () => {
+    const s = memStorage();
+    saveTeam(team, s);
+    saveTeam({ teamName: '다른팀', members: team.members }, s);
+    const remaining = deleteTeam('다른팀', s);
+    expect(remaining).toHaveLength(1);
+    expect(remaining[0].teamName).toBe('개발1팀');
+    expect(loadTeams(s)).toHaveLength(1);
   });
 });

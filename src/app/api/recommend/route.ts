@@ -5,7 +5,7 @@ import { buildFallback } from '@/lib/fallback';
 import type { ScoredFood, TeamAnalysis } from '@/lib/saju/types';
 
 const SYSTEM_PROMPT =
-  '너는 사주 기반 점심 추천 서비스 "점심팔자"의 해설가다. ' +
+  '너는 사주 기반 점심 추천 서비스 "런치포어스"의 해설가다. ' +
   '명리학 용어(오행, 상생상극, 일진)를 근거로 쓰되, 말투는 한국 직장인 단톡방 밈 톤으로 가볍고 웃기게. ' +
   '과장된 수치("언쟁 위험 200%")와 구체적 상황 묘사를 활용하라. 반드시 요청된 JSON 형식으로만 응답한다.';
 
