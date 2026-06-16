@@ -15,8 +15,8 @@ export function buildPrompt(analysis: TeamAnalysis, candidates: ScoredFood[]): s
     `최고 궁합: ${analysis.bestPair.a} & ${analysis.bestPair.b} / 최악 궁합: ${analysis.worstPair.a} & ${analysis.worstPair.b}`,
     `메뉴 후보(점수순): ${candidates.map((c) => `${c.id}(${c.name})`).join(', ')}`,
     '',
-    '위 후보 중 3개를 골라 순위를 매기고, 아래 JSON 형식으로만 응답하라.',
-    '{"top3":[{"id":"<후보 id>","comment":"<메뉴별 추천 드립 1문장>"}],"summary":"<팀 총평 2문장, 밈 톤>","pairComment":{"best":"<최고 궁합 드립 1문장>","worst":"<최악 궁합 드립 1문장>"}}',
+    '위 후보 중 3개를 골라 순위를 매기고, 아래 JSON 형식(평탄 구조, 중첩 금지)으로만 응답하라.',
+    '{"top3":[{"id":"<후보 id>","comment":"<메뉴별 추천 드립 1문장>"}],"summary":"<팀 총평 2문장, 밈 톤>","bestComment":"<최고 궁합 드립 1문장>","worstComment":"<최악 궁합 드립 1문장>"}',
   ].join('\n');
 }
 
@@ -31,20 +31,32 @@ function parseLlm(raw: string, candidates: ScoredFood[]): Omit<RecommendResult, 
   try {
     const cleaned = raw.replace(/```json|```/g, '').trim();
     const j = JSON.parse(cleaned);
-    if (!Array.isArray(j.top3) || j.top3.length < 3) return null;
-    const top3 = j.top3.slice(0, 3).map((t: { id: string; comment: string }) => {
-      const food = candidates.find((c) => c.id === t.id);
-      if (!food || typeof t.comment !== 'string' || t.comment.length > 300) {
-        throw new Error('invalid item');
-      }
-      return { id: food.id, name: food.name, emoji: food.emoji, comment: t.comment };
-    });
-    if (
-      typeof j.summary !== 'string' ||
-      typeof j.pairComment?.best !== 'string' ||
-      typeof j.pairComment?.worst !== 'string'
-    ) return null;
-    return { top3, summary: j.summary, pairComment: j.pairComment };
+    if (!Array.isArray(j.top3)) return null;
+    // 나쁜 항목은 throw 대신 건너뛰고, id/name 둘 다로 매칭 — 모델 변형에 견고하게
+    const top3: { id: string; name: string; emoji: string; comment: string }[] = [];
+    const used = new Set<string>();
+    for (const t of j.top3) {
+      if (top3.length >= 3) break;
+      const key = String(t?.id ?? t?.name ?? '');
+      const food = candidates.find(
+        (c) => !used.has(c.id) && (c.id === key || c.name === key || c.name === t?.name),
+      );
+      const comment = typeof t?.comment === 'string' ? t.comment.slice(0, 300) : '';
+      if (!food || !comment) continue;
+      used.add(food.id);
+      top3.push({ id: food.id, name: food.name, emoji: food.emoji, comment });
+    }
+    if (top3.length < 3) return null;
+    // 평탄 구조(bestComment/worstComment) 우선, 중첩(pairComment.best/worst)도 허용
+    const best = typeof j.bestComment === 'string' ? j.bestComment : j.pairComment?.best;
+    // worst는 선택값 — 2인 팀은 최고=최악 페어라 모델이 종종 생략하며, PairCard도 동일 페어면 worst를 숨긴다
+    const worstRaw = typeof j.worstComment === 'string' ? j.worstComment : j.pairComment?.worst;
+    if (typeof j.summary !== 'string' || typeof best !== 'string') return null;
+    return {
+      top3,
+      summary: j.summary,
+      pairComment: { best, worst: typeof worstRaw === 'string' ? worstRaw : '' },
+    };
   } catch {
     return null;
   }
