@@ -24,10 +24,10 @@ export function ElementChart({ analysis }: { analysis: TeamAnalysis }) {
     <div className="glow-card p-4">
       <p className="mb-2 text-xs uppercase tracking-widest text-ink-dim">팀 오행 분포</p>
       <div className="flex items-center gap-3">
-        <div className="h-36 w-36 shrink-0">
+        <div className="h-44 w-44 shrink-0">
           <ResponsiveContainer>
             <PieChart>
-              <Pie data={data} dataKey="value" innerRadius={40} outerRadius={64}
+              <Pie data={data} dataKey="value" innerRadius={50} outerRadius={82}
                 strokeWidth={0} isAnimationActive>
                 {data.map((d) => <Cell key={d.key} fill={CHART_COLORS[d.key]} />)}
               </Pie>
@@ -35,8 +35,8 @@ export function ElementChart({ analysis }: { analysis: TeamAnalysis }) {
           </ResponsiveContainer>
         </div>
         <div className="flex-1 text-sm">
-          <div className="mb-1 flex items-center gap-2">
-            <ElementCharacter element={main} size={36} />
+          <div className="mb-2 flex items-center gap-2">
+            <ElementCharacter element={main} size={52} />
             <span>
               <b style={{ color: CHART_COLORS[main] }}>
                 {ELEMENT_LABEL[main]} {analysis.teamPct[main]}%

@@ -105,8 +105,8 @@ export function TeamForm({ onSubmit }: Props) {
   return (
     <div className="flex flex-col gap-5">
       <header className="text-center">
-        <div className="flex justify-center gap-1">
-          {ELEMENT_KEYS.map((el) => <ElementCharacter key={el} element={el} size={44} />)}
+        <div className="flex justify-center gap-1.5">
+          {ELEMENT_KEYS.map((el) => <ElementCharacter key={el} element={el} size={58} />)}
         </div>
         <h1 className="neon-text mt-3 text-3xl font-extrabold">🍚 런치포어스</h1>
         <p className="mt-1 text-sm text-ink-dim">오늘 우리 팀 점심, 사주에게 물어봐</p>

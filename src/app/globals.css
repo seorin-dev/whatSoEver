@@ -33,3 +33,13 @@ body {
 .neon-text {
   text-shadow: 0 0 16px rgba(140, 150, 255, 0.7);
 }
+
+/* 룰렛 주변 캐릭터 궤도 회전 (캐릭터는 역회전으로 항상 똑바로) */
+@keyframes lf-orbit {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes lf-orbit-rev {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}

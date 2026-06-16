@@ -23,19 +23,22 @@ export function ResultView({ analysis, reco, onRedraw, onSave, onReset, saved, t
         <p className="text-xs tracking-widest text-ink-dim">
           {today} · {analysis.iljin.ganZhi}일
         </p>
-        <h2 className="neon-text mt-2 text-3xl font-extrabold">
-          오늘의 추천 {first.emoji} {first.name}
-        </h2>
+        <p className="mt-3 text-sm font-bold text-accent">🥇 오늘의 추천</p>
+        <div className="my-1 text-7xl leading-none">{first.emoji}</div>
+        <h2 className="neon-text text-4xl font-extrabold">{first.name}</h2>
         <p className="mx-auto mt-3 max-w-sm text-sm text-ink-dim">{first.comment}</p>
         <p className="mx-auto mt-2 max-w-sm text-sm">{reco.summary}</p>
       </header>
 
-      <div className="flex justify-center gap-2">
+      <div className="flex flex-col gap-2">
         {rest.map((f, i) => (
-          <div key={f.id} className="glow-card px-3 py-2 text-center text-sm">
-            <span className="text-xs text-ink-dim">{i === 0 ? '🥈' : '🥉'}</span>{' '}
-            {f.emoji} {f.name}
-            <p className="mt-0.5 max-w-40 text-xs text-ink-dim">{f.comment}</p>
+          <div key={f.id} className="glow-card flex items-center gap-3 p-3 text-left">
+            <span className="text-3xl">{i === 0 ? '🥈' : '🥉'}</span>
+            <span className="text-5xl leading-none">{f.emoji}</span>
+            <div className="flex-1">
+              <p className="text-lg font-bold">{f.name}</p>
+              <p className="mt-0.5 text-xs text-ink-dim">{f.comment}</p>
+            </div>
           </div>
         ))}
       </div>

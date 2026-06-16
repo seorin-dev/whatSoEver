@@ -17,15 +17,16 @@ page.on('console', (msg) => {
 });
 
 await page.goto(BASE);
-ok('입력 화면: 점심팔자 헤더', await page.getByText('점심팔자').first().isVisible());
+ok('입력 화면: 런치포어스 헤더', await page.getByText('런치포어스').first().isVisible());
 
 // 입력
 await page.getByPlaceholder('팀 이름 (예: 개발1팀 점심원정대)').fill('테스트팀');
 await page.getByPlaceholder('멤버 1 이름').fill('철수');
 await page.getByPlaceholder('멤버 2 이름').fill('영희');
-const dates = page.locator('input[type="date"]');
-await dates.nth(0).fill('1993-05-14');
-await dates.nth(1).fill('1996-11-02');
+// 연/월/일 분리 입력 (자동 이동) — 연도 칸 클릭 후 한 번에 타이핑
+const years = page.getByLabel('출생 연도');
+await years.nth(0).click(); await page.keyboard.type('19930514');
+await years.nth(1).click(); await page.keyboard.type('19961102');
 
 // 검증 에러 경로: 멤버 1명 이름 비우고 제출
 await page.getByPlaceholder('멤버 2 이름').fill('');
@@ -45,8 +46,8 @@ ok('결과 화면: 오행 분포 카드', await page.getByText('팀 오행 분�
 ok('결과 화면: 궁합 페어 카드', await page.getByText('오늘의 궁합 페어').isVisible());
 const firstPick = await page.locator('h2').first().textContent();
 
-// 다시 뽑기 → 새 결과
-await page.getByText('다시 뽑기').click();
+// 다른 메뉴 추천 → 새 결과
+await page.getByText('다른 메뉴 추천').click();
 await page.getByText('오늘의 추천').waitFor({ timeout: 20000 });
 const secondPick = await page.locator('h2').first().textContent();
 ok(`다시 뽑기: 1위 변경 (${firstPick?.trim()} → ${secondPick?.trim()})`, firstPick !== secondPick);

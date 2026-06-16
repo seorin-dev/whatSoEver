@@ -2,8 +2,11 @@
 
 import { useEffect, useRef, useState } from 'react';
 import type { ScoredFood, ElementKey } from '@/lib/saju/types';
-import { ELEMENT_CHARACTER, ELEMENT_LABEL } from '@/lib/saju/types';
+import { ELEMENT_CHARACTER, ELEMENT_LABEL, ELEMENT_KEYS } from '@/lib/saju/types';
 import { ElementCharacter } from './ElementCharacter';
+
+const ORBIT_RADIUS = 178; // 룰렛(288px, 반지름 144) 바깥을 도는 궤도 반지름
+const ORBIT_PERIOD = '18s';
 
 const SEGMENT_COLORS: Record<ElementKey, string> = {
   wood: '#2e6b4a', fire: '#7a2e3e', earth: '#6b542e', metal: '#4a5570', water: '#2e4a7a',
@@ -64,9 +67,32 @@ export function Roulette({ items, winnerIndex, spinMessages, onDone }: Props) {
     .join(', ');
 
   return (
-    <div className="flex flex-col items-center gap-6 py-8">
-      <div className="relative">
-        <div className="absolute -top-3 left-1/2 z-10 -translate-x-1/2 text-2xl">🔻</div>
+    <div className="flex flex-col items-center gap-8 py-6">
+      <div className="relative flex items-center justify-center" style={{ width: 400, height: 400 }}>
+        {/* 룰렛 주변을 도는 오행 캐릭터 5종 */}
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{ animation: `lf-orbit ${ORBIT_PERIOD} linear infinite` }}
+        >
+          {ELEMENT_KEYS.map((el, i) => {
+            const a = (360 / ELEMENT_KEYS.length) * i;
+            return (
+              <div
+                key={el}
+                className="absolute left-1/2 top-1/2"
+                style={{
+                  transform: `rotate(${a}deg) translateY(-${ORBIT_RADIUS}px) rotate(${-a}deg) translate(-50%, -50%)`,
+                }}
+              >
+                {/* 궤도 회전을 역으로 상쇄해 캐릭터는 항상 똑바로 */}
+                <div style={{ animation: `lf-orbit-rev ${ORBIT_PERIOD} linear infinite` }}>
+                  <ElementCharacter element={el} size={52} />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        <div className="absolute left-1/2 top-[42px] z-20 -translate-x-1/2 text-2xl drop-shadow">🔻</div>
         <div
           className="relative h-72 w-72 rounded-full border-4 border-accent/60"
           style={{
@@ -92,10 +118,6 @@ export function Roulette({ items, winnerIndex, spinMessages, onDone }: Props) {
             );
           })}
         </div>
-      </div>
-      <div className="flex items-end gap-2">
-        <ElementCharacter element="fire" size={40} />
-        <ElementCharacter element="water" size={40} />
       </div>
       <p className="neon-text min-h-6 text-center text-sm text-ink-dim">
         {spinMessages[msgIdx] ?? '팀의 기운을 읽는 중...'}
