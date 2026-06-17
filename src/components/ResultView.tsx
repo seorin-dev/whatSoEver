@@ -2,7 +2,8 @@
 
 import type { RecommendResult, TeamAnalysis } from '@/lib/saju/types';
 import { ElementChart } from './ElementChart';
-import { PairCard } from './PairCard';
+import { FortuneCard } from './FortuneCard';
+import { FoodImage } from './FoodImage';
 
 interface Props {
   analysis: TeamAnalysis;
@@ -24,7 +25,10 @@ export function ResultView({ analysis, reco, onRedraw, onSave, onReset, saved, t
           {today} · {analysis.iljin.ganZhi}일
         </p>
         <p className="mt-3 text-sm font-bold text-accent">🥇 오늘의 추천</p>
-        <div className="my-1 text-7xl leading-none">{first.emoji}</div>
+        <div className="my-2 flex justify-center">
+          <FoodImage id={first.id} name={first.name} emoji={first.emoji} size={160}
+            className="rounded-2xl shadow-lg shadow-accent/20" />
+        </div>
         <h2 className="neon-text text-4xl font-extrabold">{first.name}</h2>
         <p className="mx-auto mt-3 max-w-sm text-sm text-ink-dim">{first.comment}</p>
         <p className="mx-auto mt-2 max-w-sm text-sm">{reco.summary}</p>
@@ -34,7 +38,7 @@ export function ResultView({ analysis, reco, onRedraw, onSave, onReset, saved, t
         {rest.map((f, i) => (
           <div key={f.id} className="glow-card flex items-center gap-3 p-3 text-left">
             <span className="text-3xl">{i === 0 ? '🥈' : '🥉'}</span>
-            <span className="text-5xl leading-none">{f.emoji}</span>
+            <FoodImage id={f.id} name={f.name} emoji={f.emoji} size={56} className="rounded-xl" />
             <div className="flex-1">
               <p className="text-lg font-bold">{f.name}</p>
               <p className="mt-0.5 text-xs text-ink-dim">{f.comment}</p>
@@ -44,7 +48,7 @@ export function ResultView({ analysis, reco, onRedraw, onSave, onReset, saved, t
       </div>
 
       <ElementChart analysis={analysis} />
-      <PairCard analysis={analysis} reco={reco} />
+      <FortuneCard analysis={analysis} reco={reco} />
 
       <div className="flex gap-2">
         <button className="flex-1 rounded-xl bg-accent py-3 font-bold text-night" onClick={onRedraw}>

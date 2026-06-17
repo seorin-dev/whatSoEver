@@ -16,7 +16,7 @@ describe('buildRecommendation', () => {
     const llmJson = JSON.stringify({
       top3: candidates.slice(0, 3).map((c) => ({ id: c.id, comment: '드립' })),
       summary: '총평',
-      pairComment: { best: 'b', worst: 'w' },
+      teamFortune: '운세', teamTopic: '토픽',
     });
     const r = await buildRecommendation(analysis, candidates, async () => llmJson, 'seed');
     expect(r.source).toBe('llm');
@@ -36,7 +36,7 @@ describe('buildRecommendation', () => {
   it('LLM이 없는 음식 id를 주면 폴백', async () => {
     const bad = JSON.stringify({
       top3: [{ id: 'ghost-food', comment: 'x' }], summary: 's',
-      pairComment: { best: 'b', worst: 'w' },
+      teamFortune: '운세', teamTopic: '토픽',
     });
     const r = await buildRecommendation(analysis, candidates, async () => bad, 'seed');
     expect(r.source).toBe('fallback');

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { ScoredFood, ElementKey } from '@/lib/saju/types';
 import { ELEMENT_CHARACTER, ELEMENT_LABEL, ELEMENT_KEYS } from '@/lib/saju/types';
 import { ElementCharacter } from './ElementCharacter';
+import { FoodImage } from './FoodImage';
 
 const ORBIT_RADIUS = 178; // 룰렛(288px, 반지름 144) 바깥을 도는 궤도 반지름
 const ORBIT_PERIOD = '18s';
@@ -112,7 +113,9 @@ export function Roulette({ items, winnerIndex, spinMessages, onDone }: Props) {
                   transform: `rotate(${angle}deg) translateY(-108px) rotate(0deg)`,
                   transformOrigin: '0 0',
                 }}>
-                <div className="text-xl">{f.emoji}</div>
+                <div className="-ml-4 flex justify-center">
+                  <FoodImage id={f.id} name={f.name} emoji={f.emoji} size={32} className="rounded-md" />
+                </div>
                 <div className="-ml-6 w-12">{f.name}</div>
               </div>
             );

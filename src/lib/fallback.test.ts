@@ -18,8 +18,9 @@ describe('buildFallback', () => {
     expect(r.top3[0].id).toBe(candidates[0].id); // 1위 = 최고 점수
     for (const t of r.top3) expect(t.comment.length).toBeGreaterThan(0);
     expect(r.summary.length).toBeGreaterThan(0);
-    expect(r.pairComment.best).toContain(analysis.bestPair.a);
-    expect(r.pairComment.worst).toContain(analysis.worstPair.a);
+    // 팀 운세에는 오늘 일진 간지가, 토픽에는 럭키/대화 안내가 들어간다
+    expect(r.teamFortune).toContain(analysis.iljin.ganZhi);
+    expect(r.teamTopic.length).toBeGreaterThan(0);
     expect(r.source).toBe('fallback');
   });
   it('같은 시드면 같은 결과 (결정적)', () => {

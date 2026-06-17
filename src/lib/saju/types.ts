@@ -73,7 +73,8 @@ export interface ScoredFood extends FoodItem {
 export interface RecommendResult {
   top3: { id: string; name: string; emoji: string; comment: string }[];
   summary: string;
-  pairComment: { best: string; worst: string };
+  teamFortune: string; // 오늘 일진 + 팀 오행 기반 한 줄 운세
+  teamTopic: string; // 오행 기준 점심 대화 주제 + 럭키 요소
   source: 'llm' | 'fallback';
 }
 

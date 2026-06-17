@@ -109,7 +109,7 @@ export function TeamForm({ onSubmit }: Props) {
           {ELEMENT_KEYS.map((el) => <ElementCharacter key={el} element={el} size={58} />)}
         </div>
         <h1 className="neon-text mt-3 text-3xl font-extrabold">🍚 런치포어스</h1>
-        <p className="mt-1 text-sm text-ink-dim">오늘 우리 팀 점심, 사주에게 물어봐</p>
+        <p className="mt-1 text-sm text-ink-dim">궁합은 과학이니까, 사주 기반 맞춤형 점심 큐레이션</p>
       </header>
 
       {saved.length > 0 && (
@@ -181,7 +181,7 @@ export function TeamForm({ onSubmit }: Props) {
       <button
         className="rounded-xl bg-accent py-4 text-lg font-bold text-night neon-text"
         onClick={handleSubmit}>
-        오늘의 점심 운세 보기 🔮
+        오늘의 운명적인 식단 받기 🔮
       </button>
       <p className="text-center text-xs text-ink-dim">태어난 시간은 몰라도 OK · 연도는 직접 입력</p>
     </div>
